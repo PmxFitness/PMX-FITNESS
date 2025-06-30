@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peter Macx Fitness - Professional Personal Trainer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for the Inter font and general body defaults */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+            background-color: #1a202c; /* Equivalent to Tailwind bg-gray-900 */
+            color: #e2e8f0; /* Equivalent to Tailwind text-gray-200 */
+        }
+        /* Style for smooth scrolling when clicking nav links */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Simple hover effect for services cards */
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1); /* Darker shadow for dark mode */
+        }
+        /* Custom Tailwind Colors (from uploaded image: dark blue #1E1F4D, bright green lime-400) */
+        /* Define custom colors for Tailwind to use */
+        :root {
+            --color-primary-dark-blue: #1E1F4D;
+            --color-accent-green: #A3E635; /* Using lime-400 equivalent for bright green */
+        }
+        .bg-custom-dark-blue {
+            background-color: var(--color-primary-dark-blue);
+        }
+        .text-custom-dark-blue {
+            color: var(--color-primary-dark-blue);
+        }
+        .border-custom-dark-blue {
+            border-color: var(--color-primary-dark-blue);
+        }
+        .bg-custom-green {
+            background-color: var(--color-accent-green);
+        }
+        .text-custom-green {
+            color: var(--color-accent-green);
+        }
+        .border-custom-green {
+            border-color: var(--color-accent-green);
+        }
+
+        /* Minimal button styling for consistency - adapted to new theme */
+        .btn-primary {
+            @apply inline-block bg-custom-green text-custom-dark-blue font-semibold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-lime-500;
+        }
+        .btn-secondary {
+            @apply inline-block border border-custom-green text-custom-green font-semibold py-3 px-8 rounded-full transition-all duration-300 hover:bg-lime-50 hover:text-lime-600;
+        }
+
+        /* About Section Background - Maximalist with Leading Lines Image */
+        .about-background {
+            background-image: url(/images/afroamerican-boxer-training-with-dumbbells.jpg); /* Background image: 11.jpg */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative; /* Needed for overlay */
+        }
+        .about-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 31, 77, 0.7); /* Slightly more opaque dark blue overlay for text readability */
+            z-index: 1; /* Place overlay above background image */
+        }
+        /* Content inside about-background should be above overlay */
+        .about-content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+        /* Stronger text shadow for maximalist feel */
+        .text-shadow-heavy {
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7), 4px 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Dark mode specific adjustments for general elements */
+        .bg-gray-800 { background-color: #2d3748; /* Darker shade for sections */ }
+        .bg-gray-850 { background-color: #27303f; /* Slightly darker shade for contrast */ }
+        .text-gray-100 { color: #f7fafc; }
+        .text-gray-200 { color: #edf2f7; }
+        .text-gray-600 { color: #a0aec0; } /* Adjusted for dark mode readability */
+        .text-gray-700 { color: #cbd5e0; } /* Adjusted for dark mode readability */
+        .text-gray-900 { color: #e2e8f0; } /* Headings in dark mode */
+        .bg-gray-50 { background-color: #2d3748; } /* Cards that were gray-50 */
+        .border-gray-300 { border-color: #4a5568; } /* Input borders */
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18); }
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.18); }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.25); }
+
+        /* Adjusting featured service card background for dark mode */
+        .featured-service-card {
+            background-color: rgba(255, 255, 255, 0.08); /* A subtle white overlay on dark for 'maximalist' texture */
+        }
+
+        /* Slideshow Specific Styles */
+        .slideshow-container {
+            width: 100%;
+            max-width: 900px; /* Adjust max-width as needed */
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+            border-radius: 1rem; /* rounded-xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.25); /* shadow-xl */
+        }
+
+        .slideshow-inner {
+            display: flex;
+            width: 300%; /* 3 slides * 2 images per slide = 6 images total. Each slide is 100% of the container, so 300% for 3 sets of 2 images */
+            animation: slideAnimation 15s infinite ease-in-out; /* 3 slides * 5 seconds per slide = 15s total */
+        }
+
+        .slideshow-slide {
+            width: calc(100% / 3); /* Each slide takes 1/3rd of the inner container width (which is 300% of slideshow-container) */
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            gap: 1rem; /* Space between two images side by side */
+            padding: 1rem; /* Padding inside each slide */
+        }
+
+        .slideshow-slide img {
+            width: 48%; /* Each image takes slightly less than half to allow gap */
+            height: 250px; /* Fixed height for consistency */
+            object-fit: cover;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.18);
+        }
+
+        @keyframes slideAnimation {
+            0% { transform: translateX(0%); } /* Show first pair */
+            33.33% { transform: translateX(-33.33%); } /* Show second pair */
+            66.66% { transform: translateX(-66.66%); } /* Show third pair */
+            100% { transform: translateX(0%); } /* Back to first pair */
+        }
+
+        @media (max-width: 768px) {
+            .slideshow-slide {
+                flex-direction: column; /* Stack images vertically on small screens */
+                align-items: center;
+            }
+            .slideshow-slide img {
+                width: 95%; /* Make images wider on small screens */
+                height: 200px; /* Adjust height for mobile */
+            }
+        }
+
+        /* New styles for the Kickboxing highlight section */
+        .kickboxing-highlight-background {
+            background-image: url(/images/175fc9ab-e294-4ae9-ac77-29478313a771.jpg); /* Background image for kickboxing section */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden; /* Ensure overlay doesn't overflow */
+        }
+
+        .kickboxing-highlight-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); /* Dark overlay for text readability */
+            z-index: 1;
+        }
+
+        .kickboxing-highlight-content {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+            padding-top: 4rem; /* py-16 */
+            padding-bottom: 4rem; /* py-16 */
+        }
+        @media (min-width: 768px) {
+            .kickboxing-highlight-content {
+                padding-top: 6rem; /* md:py-24 */
+                padding-bottom: 6rem; /* md:py-24 */
+            }
+        }
+
+        /* New styles for the Sessions section background */
+        .sessions-background {
+            background-image: url(//images/img-tesla-former-3-1.jpg); /* Background image for sessions section */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sessions-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* Darker overlay for text readability */
+            z-index: 1;
+        }
+
+        .sessions-content {
+            position: relative;
+            z-index: 2; /* Ensure content is above the overlay */
+            padding-top: 4rem; /* py-16 */
+            padding-bottom: 4rem; /* py-16 */
+        }
+        @media (min-width: 768px) {
+            .sessions-content {
+                padding-top: 6rem; /* md:py-24 */
+                padding-bottom: 6rem; /* md:py-24 */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <!-- Header and Navigation -->
+    <header class="bg-custom-dark-blue text-white shadow-sm py-4 fixed top-0 w-full z-50 rounded-b-xl">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="#about" class="block">
+                <img src="/images/LOGO FINAL.png" alt="Peter Macx Fitness Logo" class="h-8 md:h-10 object-contain">
+            </a>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#about" class="text-gray-200 hover:text-custom-green font-medium transition-colors duration-300">About</a>
+                <a href="#services" class="text-gray-200 hover:text-custom-green font-medium transition-colors duration-300">Services</a>
+                <a href="#booking" class="text-custom-green hover:text-lime-500 font-semibold transition-colors duration-300">Book Now</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-custom-green">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-custom-dark-blue shadow-lg py-4 border-t border-gray-700">
+            <nav class="flex flex-col items-center space-y-4">
+                <a href="#about" class="text-white hover:text-custom-green font-medium transition-colors duration-300 text-lg py-2">About</a>
+                <a href="#services" class="text-white hover:text-custom-green font-medium transition-colors duration-300 text-lg py-2">Services</a>
+                <a href="#booking" class="btn-primary text-lg py-2 px-6">Book Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="pt-20"> <!-- Added padding-top to account for fixed header -->
+
+        <!-- About Section (Hero - also functions as Home Page) -->
+        <section id="about" class="about-background text-white py-20 md:py-28 text-center rounded-b-3xl shadow-xl">
+            <div class="about-content-wrapper container mx-auto px-6 max-w-4xl">
+                <!-- Coach Peter Photo - Reverted to original styling -->
+                <img src="/images/COACH PETER.jpg" alt="Coach Peter" class="rounded-xl w-48 h-48 mx-auto mb-6 border-4 border-white shadow-lg object-cover">
+                <h2 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight text-shadow-heavy">
+                    Ignite Your Potential with <span class="text-custom-green">Coach Peter</span>
+                </h2>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 text-shadow-heavy">
+                    Dedicated to transforming lives through personalized fitness and holistic wellness.
+                    Let's achieve your goals together!
+                </p>
+                <a href="#booking" class="btn-primary">Start Your Journey</a>
+
+                <!-- Featured Services (Homepage Element) - Images removed as requested -->
+                <div class="mt-16 pt-8 border-t border-gray-700 w-full text-center">
+                    <h3 class="text-3xl font-bold mb-8 text-shadow-heavy">Featured Services</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-white text-left">
+                        <div class="featured-service-card p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                            <div class="text-custom-green text-3xl mb-2">🤸</div>
+                            <h4 class="font-semibold text-xl text-gray-100">Kids Fitness</h4>
+                            <p class="text-sm text-gray-200 opacity-80">Fun programs for healthy growth.</p>
+                        </div>
+                        <div class="featured-service-card p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                            <div class="text-custom-green text-3xl mb-2">🥊</div>
+                            <h4 class="font-semibold text-xl text-gray-100">Kickboxing</h4>
+                            <p class="text-sm text-gray-200 opacity-80">High-energy cardio & self-defense.</p>
+                        </div>
+                        <div class="featured-service-card p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+                            <div class="text-custom-green text-3xl mb-2">🥗</div>
+                            <h4 class="font-semibold text-xl text-gray-100">Nutrition & Diet</h4>
+                            <p class="text-sm text-gray-200 opacity-80">Personalized meal planning.</p>
+                        </div>
+                    </div>
+                    <p class="mt-8 text-lg text-gray-200 opacity-90">
+                        <a href="#services" class="text-custom-green hover:underline font-semibold">View all our services &rarr;</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kickboxing Highlight / Callout (Background Image) -->
+        <section class="kickboxing-highlight-background">
+            <div class="kickboxing-highlight-content container mx-auto px-6 max-w-4xl text-center">
+                <h3 class="text-4xl font-bold mb-8 text-custom-green text-shadow-heavy">
+                    Ready to Kick Your Routine Up a Notch?
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-left">
+                    <div>
+                        <p class="text-lg text-gray-200 mb-4">
+                            **Cardio Kickboxing** is the ultimate mash-up workout that mixes boxing and martial arts with aerobics. It's not just about strength; it's about agility, endurance, and power.
+                        </p>
+                        <ul class="text-gray-200 space-y-2 mb-6 list-disc list-inside">
+                            <li>A person weighing 83 kilos can burn about <span class="font-bold text-custom-green">444 calories in just 30 minutes!</span></li>
+                            <li>Especially great for women, as it can help target stubborn belly fat.</li>
+                        </ul>
+                        <a href="#booking" class="btn-primary">Book Your Free Kickboxing Trial Today!</a>
+                    </div>
+                    <!-- The image is now a background, so no <img> tag here -->
+                    <div></div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 md:py-24 bg-gray-800">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <h3 class="text-4xl font-bold text-center mb-12 text-custom-green">Our Services</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Service Card 1: Kids Fitness -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">🤸</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Kids Fitness</h4>
+                        <p class="text-gray-200 mb-4">Engaging and fun fitness programs designed specifically for children to promote healthy growth and activity.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 2: Fitness for Seniors -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">👴👵</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Fitness for Seniors</h4>
+                        <p class="text-gray-200 mb-4">Gentle yet effective exercises tailored for seniors to improve mobility, strength, and overall well-being.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 3: Sports Performance -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">🏅</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Sports Performance</h4>
+                        <p class="text-gray-200 mb-4">Specialized training to enhance athletic abilities, speed, agility, and power for various sports.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 4: Kickboxing -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">🥊</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Kickboxing</h4>
+                        <p class="text-gray-200 mb-4">High-energy cardio & self-defense that mixes boxing and martial arts with aerobics. Burn up to 444 calories in 30 minutes for an 83kg person, helping target stubborn belly fat, especially for women.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 5: Nutrition and Diet -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">🥗</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Nutrition and Diet</h4>
+                        <p class="text-sm text-gray-200 opacity-80">Personalized meal planning.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 6: Weight Management Programs -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">⚖️</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Weight Management Programs</h4>
+                        <p class="text-gray-200 mb-4">Tailored weight loss and weight gain programs focusing on sustainable results and healthy habits.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 7: Lower Back Pain & Diabetes Management -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">🩹</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Lower Back Pain & Diabetes Management</h4>
+                        <p class="text-gray-200 mb-4">Specialized exercise routines to alleviate lower back pain and manage diabetes through physical activity.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                    <!-- Service Card 8: Assisted Stretching & Massage -->
+                    <div class="service-card bg-gray-700 p-8 rounded-lg shadow-md transition-all duration-300 flex flex-col items-center text-center">
+                        <div class="text-custom-green text-5xl mb-4">💆</div>
+                        <h4 class="text-2xl font-semibold mb-3 text-gray-100">Assisted Stretching & Massage</h4>
+                        <p class="text-gray-200 mb-4">Sessions focused on improving flexibility, reducing muscle soreness, and promoting recovery.</p>
+                        <span class="text-custom-green font-medium">Learn More &rarr;</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slideshow Section -->
+        <section id="slideshow" class="py-16 md:py-24 bg-gray-850">
+            <div class="container mx-auto px-6 text-center">
+                <h3 class="text-4xl font-bold mb-12 text-custom-green">Our Transformations in Action</h3>
+                <div class="slideshow-container">
+                    <div class="slideshow-inner">
+                        <!-- Slide 1: 2 images -->
+                        <div class="slideshow-slide">
+                            <img src="/images/KIDS FITNESS.jpg" alt="Kids Fitness Training" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                            <img src="/images/KICK BOXING.jpg" alt="Kickboxing Training" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                        </div>
+                        <!-- Slide 2: 2 images -->
+                        <div class="slideshow-slide">
+                            <img src="/images/cardio-training-.avif" alt="Cardio Training" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                            <img src="/images/istockphoto-614874682-612x612.jpg" alt="Strength Training" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                        </div>
+                        <!-- Slide 3: 2 images -->
+                        <div class="slideshow-slide">
+                            <img src="/images/img-tesla-former-3-1.jpg" alt="Fitness Posing" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                            <img src="/images/self-determined-african-american-boy-600nw-1414032905.webp" alt="Child doing plank" onerror="this.onerror=null;this.src='https://placehold.co/400x250/2d3748/cbd5e0?text=Image+Missing';" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-16 md:py-24 bg-gray-850">
+            <div class="container mx-auto px-6 max-w-5xl">
+                <h3 class="text-4xl font-bold text-center mb-12 text-custom-green">Pricing Plans</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Pricing Card 1 -->
+                    <div class="bg-gray-700 p-8 rounded-lg shadow-lg flex flex-col items-center text-center border-t-4 border-custom-green">
+                        <h4 class="text-2xl font-bold mb-3 text-custom-green">Starter Pack</h4>
+                        <p class="text-gray-200 mb-4">Perfect for beginners</p>
+                        <div class="text-5xl font-extrabold text-gray-100 mb-6">
+                            AED 10,000<span class="text-xl text-gray-300">/month</span>
+                        </div>
+                        <ul class="text-gray-200 space-y-3 mb-8 text-left w-full max-w-xs">
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> 4 Personal Sessions</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Basic Meal Guide</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Weekly Check-ins</li>
+                            <li class="flex items-center text-gray-500"><span class="text-red-400 mr-2">✖</span> Advanced Tracking</li>
+                        </ul>
+                        <a href="#booking" class="btn-primary">Choose Plan</a>
+                    </div>
+                    <!-- Pricing Card 2 (Featured) -->
+                    <div class="bg-gray-700 p-8 rounded-lg shadow-xl flex flex-col items-center text-center border-t-4 border-custom-dark-blue relative scale-105">
+                        <span class="absolute top-0 right-0 bg-custom-dark-blue text-white text-sm font-semibold px-4 py-1 rounded-bl-lg">Popular</span>
+                        <h4 class="text-2xl font-bold mb-3 text-custom-dark-blue">Pro Transformation</h4>
+                        <p class="text-gray-200 mb-4">Accelerate your progress</p>
+                        <div class="text-5xl font-extrabold text-gray-100 mb-6">
+                            AED 25,000<span class="text-xl text-gray-300">/month</span>
+                        </div>
+                        <ul class="text-gray-200 space-y-3 mb-8 text-left w-full max-w-xs">
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> 12 Personal Sessions</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Custom Meal Plan</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Daily Support Chat</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Advanced Progress Tracking</li>
+                        </ul>
+                        <a href="#booking" class="btn-primary">Choose Plan</a>
+                    </div>
+                    <!-- Pricing Card 3 -->
+                    <div class="bg-gray-700 p-8 rounded-lg shadow-lg flex flex-col items-center text-center border-t-4 border-custom-green">
+                        <h4 class="text-2xl font-bold mb-3 text-custom-green">Ultimate VIP</h4>
+                        <p class="text-gray-200 mb-4">Comprehensive wellness</p>
+                        <div class="text-5xl font-extrabold text-gray-100 mb-6">
+                            AED 40,000<span class="text-xl text-gray-300">/month</span>
+                        </div>
+                        <ul class="text-gray-200 space-y-3 mb-8 text-left w-full max-w-xs">
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Unlimited Sessions</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Personalized Meal Prep</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> 24/7 Priority Support</li>
+                            <li class="flex items-center"><span class="text-green-400 mr-2">✔</span> Exclusive Workshop Access</li>
+                        </ul>
+                        <a href="#booking" class="btn-primary">Choose Plan</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sessions Section -->
+        <section id="sessions" class="sessions-background">
+            <div class="sessions-content container mx-auto px-6 max-w-4xl text-center">
+                <h3 class="text-4xl font-bold mb-8 text-custom-green">What to Expect in Your Sessions</h3>
+                <p class="text-lg text-gray-200 mb-10">
+                    Each session is designed to be challenging, engaging, and specifically tailored to your evolving needs and goals.
+                    We focus on proper form, progressive overload, and building sustainable habits.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="flex items-start bg-gray-700 p-6 rounded-lg shadow-sm bg-opacity-70">
+                        <div class="text-3xl text-custom-green mr-4">🗓️</div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2 text-gray-100">Flexible Scheduling</h4>
+                            <p class="text-gray-200">We work around your availability to find convenient times that fit your lifestyle.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start bg-gray-700 p-6 rounded-lg shadow-sm bg-opacity-70">
+                        <div class="text-3xl text-custom-green mr-4">🎯</div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2 text-gray-100">Goal-Oriented Training</h4>
+                            <p class="text-gray-200">Every workout contributes directly to your short-term and long-term fitness objectives.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start bg-gray-700 p-6 rounded-lg shadow-sm bg-opacity-70">
+                        <div class="text-3xl text-custom-green mr-4">📈</div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2 text-gray-100">Progress Tracking</h4>
+                            <p class="text-gray-200">Regular assessments and tracking keep you motivated and on track with visible results.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start bg-gray-700 p-6 rounded-lg shadow-sm bg-opacity-70">
+                        <div class="text-3xl text-custom-green mr-4">🗣️</div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2 text-gray-100">Constant Feedback</h4>
+                            <p class="text-gray-200">Receive constructive feedback and adjustments to optimize your performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Section (Call to Action) -->
+        <section id="booking" class="py-16 md:py-24 bg-custom-dark-blue text-white text-center rounded-t-3xl shadow-xl">
+            <div class="container mx-auto px-6 max-w-4xl">
+                <h3 class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-shadow-heavy">Ready to Transform Your Life?</h3>
+                <p class="text-xl md:text-2xl mb-10 opacity-90 text-shadow-heavy">
+                    Book your free consultation session today and let's discuss your unique fitness journey.
+                </p>
+                <a href="#contact" class="btn-secondary bg-white text-custom-dark-blue hover:bg-gray-100 border-none px-10 py-4 text-xl">
+                    Book for a Free Trial Session
+                </a>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-gray-800">
+            <div class="container mx-auto px-6 max-w-3xl">
+                <h3 class="text-4xl font-bold text-center mb-8 text-custom-green">Get in Touch</h3>
+                <p class="text-lg text-gray-200 text-center mb-10">
+                    Have questions or ready to start? Reach out to us!
+                </p>
+
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2 bg-gray-700 p-8 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold mb-4 text-custom-green">Contact Details</h4>
+                        <p class="text-gray-200 mb-4">
+                            <strong>Phone (UAE):</strong> <a href="tel:+971547685190" class="text-custom-green hover:underline">+971 54 768 5190</a>,
+                            <a href="tel:+971545356151" class="text-custom-green hover:underline">+971 54 535 6151</a>
+                        </p>
+                        <p class="text-gray-200 mb-4">
+                            <strong>Phone (Kenya):</strong> <a href="tel:+254748884932" class="text-custom-green hover:underline">+254 748 884 932</a>
+                        </p>
+                        <p class="text-gray-200 mb-4">
+                            <strong>Email:</strong> <a href="mailto:petermacharia337@gmail.com" class="text-custom-green hover:underline">petermacharia337@gmail.com</a>
+                        </p>
+                        <p class="text-gray-200">
+                            <strong>Social Media:</strong><br>
+                            <a href="https://instagram.com/petermacxfitness" target="_blank" class="text-custom-green hover:underline mr-2">Instagram: Peter Macx Fitness</a> <br>
+                            <a href="https://tiktok.com/@petermacxfitness" target="_blank" class="text-custom-green hover:underline mr-2">TikTok: Peter Macx Fitness</a>
+                            <!-- Keeping Facebook/LinkedIn as placeholders if needed for future -->
+                        </p>
+                    </div>
+
+                    <div class="md:w-1/2 bg-gray-700 p-8 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold mb-4 text-custom-green">Send a Message</h4>
+                        <form action="#" method="POST" class="space-y-4">
+                            <!-- Note: This form requires backend processing (e.g., PHP script) to send emails. It won't work on its own. -->
+                            <div>
+                                <label for="name" class="block text-gray-200 font-medium mb-2">Name</label>
+                                <input type="text" id="name" name="name" class="w-full p-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-custom-green" placeholder="Your Name" required>
+                            </div>
+                            <div>
+                                <label for="email" class="block text-gray-200 font-medium mb-2">Email</label>
+                                <input type="email" id="email" name="email" class="w-full p-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-custom-green" placeholder="your.email@example.com" required>
+                            </div>
+                            <div>
+                                <label for="message" class="block text-gray-200 font-medium mb-2">Message</label>
+                                <textarea id="message" name="message" rows="5" class="w-full p-3 border border-gray-600 rounded-md bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-custom-green" placeholder="Tell us about your fitness goals..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary w-full md:w-auto">Send Message</button>
+                            <p class="text-xs text-gray-400 mt-2">
+                                *This form is for demonstration. A backend script is needed to send actual emails.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-10 text-center rounded-t-xl">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2025 Peter Macx Fitness. All rights reserved.</p>
+            <div class="flex justify-center space-x-6 mt-6">
+                <a href="#" class="hover:text-custom-green transition-colors duration-300">Privacy Policy</a>
+                <a href="#" class="hover:text-custom-green transition-colors duration-300">Terms of Service</a>
+                <a href="mailto:petermacharia337@gmail.com" class="hover:text-custom-green transition-colors duration-300">Email Us</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const navLinks = mobileMenu.querySelectorAll('a');
+
+            // Toggle mobile menu visibility
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Hide mobile menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Smooth scroll for all internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
